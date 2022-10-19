@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  </head>
+  <body>
+    <script>
+      const available_port = new Proxy({ curr: 10086 }, {
+        // auto-increase getter
+        get(target, p, receiver) {
+          if(p !== 'curr') return undefined
+          else {
+            let out = Reflect.get(target, p, receiver)
+            Reflect.set(target, 'curr', out + 1)
+            // target.curr += 1
+            return out
+          }
+        },
+        // disabled setter
+        set() {
+          return false
+        }
+      })
+
+      console.log(available_port.curr)
+      console.log(Reflect.get(available_port, 'curr'))
+      console.log(available_port.curr)
+      available_port.curr += 10
+      console.log(available_port.curr)
+      console.log(available_port.curr)
+      available_port.curr += 10
+      console.log(available_port.curr)
+    </script>
+  </body>
+</html>
